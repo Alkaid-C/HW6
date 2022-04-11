@@ -382,7 +382,7 @@ void RedBlackTree::printer(Node* theRoot)
 }
 void RedBlackTree::DebugPrinter()
 {
-	for (int i = 0; i < DebugVector.size(); i++)
+	for (size_t i = 0; i < DebugVector.size(); i++)
 	{
 		NodePrinter(DebugVector.at(i));
 	}
