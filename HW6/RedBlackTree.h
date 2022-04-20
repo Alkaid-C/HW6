@@ -27,6 +27,7 @@ private:
 	//this vector is for debug usage only.
 	//it will never be called except in DebugPrinter(). Try this function, it is super elegant.
 	//the copy constructer may not copy that, but who cares.
+	//try to make some change
 	Node* treeCopyer(Node* OldRoot, Node* newParent);
 	bool exist(unsigned long long int value, Node* theRoot);
 	Node* find(unsigned long long int value, Node* theRoot);
