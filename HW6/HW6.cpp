@@ -190,7 +190,6 @@ void TestCopyConstructor() {
 
 
 
-
 void TestContains() {
 	cout << "Testing Contains..." << endl;
 	RedBlackTree* rbt = new RedBlackTree();
@@ -205,20 +204,38 @@ void TestContains() {
 	rbt->Insert(34);
 
 	assert(rbt->Contains(34));
+	rbt->DebugPrinter();
+	assert(rbt->Contains(12));
+	rbt->DebugPrinter();
+	assert(rbt->Contains(35) == false);
+	rbt->DebugPrinter();
 	delete rbt;
-
-
-	cout << "TESTS MISSING" << endl << endl;
+	cout << "PASSED!" << endl << endl;
+	rbt = new RedBlackTree();
+	rbt->DebugPrinter();
+	assert(rbt->Contains(34) == false);
+	cout << "PASSED!" << endl << endl;
+	delete rbt;
+	rbt->DebugPrinter();
 	cout << "PASSED!" << endl << endl;
 }
-
-
 
 
 void TestGetMinimumMaximum() {
 	cout << "Testing Get Minimum and Get Maximum..." << endl;
 
-	cout << "TESTS MISSING" << endl << endl;
+	RedBlackTree rbt = RedBlackTree();
+	rbt.Insert(30);
+	rbt.Insert(20);
+	rbt.Insert(60);
+	rbt.Insert(33);
+	rbt.Insert(23);
+	rbt.Insert(85);
+	rbt.Insert(61);
+	rbt.DebugPrinter();
+	cout << rbt.GetMax();
+	assert(rbt.GetMin() == 20);
+	assert(rbt.GetMax() == 85);
 
 	cout << "PASSED!" << endl << endl;
 }

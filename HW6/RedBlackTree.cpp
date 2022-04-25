@@ -39,16 +39,19 @@ Node* RedBlackTree::treeCopyer(Node* OldRoot, Node* newParent)
 		return NewNode;
 	}
 }
-//RedBlackTree::~RedBlackTree()
-//{
-//	RBT_deleter(root);
-//}
+RedBlackTree::~RedBlackTree()
+{
+	RBT_deleter(root);
+}
 void RedBlackTree::RBT_deleter(Node* theRoot)
 {
-	if (theRoot->Left != nullptr)
-		RBT_deleter(theRoot->Left);
-	if (theRoot->Right != nullptr)
-		RBT_deleter(theRoot->Right);
+	if (theRoot != nullptr)
+	{
+		if (theRoot->Left != nullptr)
+			RBT_deleter(theRoot->Left);
+		if (theRoot->Right != nullptr)
+			RBT_deleter(theRoot->Right);
+	}
 	delete theRoot;
 }
 bool RedBlackTree::Contains(unsigned long long int value)
@@ -61,6 +64,8 @@ bool RedBlackTree::exist(unsigned long long int value)
 }
 bool RedBlackTree::exist(unsigned long long int value, Node* theRoot)
 {
+	if (theRoot == nullptr)
+		return false;
 	if (theRoot->value == value)
 		return true;
 	else if (theRoot->value > value)
@@ -261,6 +266,92 @@ void RedBlackTree::insert_balancer(Node* theNode)
 		}
 	}
 }
+void RedBlackTree::Remove(unsigned long long int value)
+{
+	if (exist(value))
+	{
+		Node* theNode = find(value);
+		Node* newNode;
+		// in binary search tree, there are 3 cases for deleting: the node has no child, 1 child, and 2 children
+		if (theNode->Left == nullptr && theNode->Right == nullptr)
+		{
+			//if it has no child, just delete it. don't forget delete it from its parent's child list.
+			if (theNode->Parent == nullptr)
+				//if it is the root
+				root = nullptr;
+			else if (theNode->Parent->Left != nullptr)
+				if (theNode->Parent->Left->value == theNode->value)
+					//if it is the left child
+					theNode->Parent->Left = nullptr;
+				else
+					//if it is the right child
+					theNode->Parent->Right = nullptr;
+			else
+				theNode->Parent->Right = nullptr;
+		}
+		else if (theNode->Left == nullptr || theNode->Right == nullptr)
+		{
+			//if it has one child, then use the child to replace it
+			if (theNode->Left != nullptr)
+			{//if it has left child
+				theNode->Left->Parent = theNode->Parent;
+				if (theNode->Parent == nullptr)
+					//if it is the root
+					root = theNode->Left;
+				else if (theNode->Parent->Left != nullptr)
+					if (theNode->Parent->Left->value == theNode->value)
+						//if it is the left child
+						theNode->Parent->Left = theNode->Left;
+					else
+						//if it is the right child
+						theNode->Parent->Right = theNode->Left;
+				else
+					theNode->Parent->Right = theNode->Left;
+			}
+			else
+			{//otherwise, it has the right child
+				theNode->Right->Parent = theNode->Parent;
+				if (theNode->Parent == nullptr)
+					root = theNode->Right;
+				else if (theNode->Parent->Left != nullptr)
+					if (theNode->Parent->Left->value == theNode->value)
+						theNode->Parent->Left = theNode->Right;
+					else
+						theNode->Parent->Right = theNode->Right;
+				else
+					theNode->Parent->Right = theNode->Right;
+			}
+		}
+		else
+		{
+			//then if it has 2 children, replace it with the immediate successor
+			Node* SucNode = find(GetMin(theNode->Right));
+			//exchange value
+			unsigned long long int temp = SucNode->value;
+			SucNode->value = theNode->value;
+			theNode->value = temp;
+			//note, exchange value does NOT make the tree to be an invalid BST.
+			Remove(value);
+		}
+		if (theNode->color == Red)
+		{
+
+		}
+		else
+		{
+
+		}
+
+	}
+}
+void RedBlackTree::bst_remove(Node* theNode, Node* theRoot)
+{
+
+}
+void RedBlackTree::remove_balancer(Node* theNode)
+{
+
+}
 void RedBlackTree::left_rotater(Node* theNode)
 {
 	if (theNode->Parent == nullptr)
@@ -349,7 +440,7 @@ unsigned long long int RedBlackTree::GetMax()
 unsigned long long int RedBlackTree::GetMax(Node* theRoot)
 {
 	if (theRoot->Right != nullptr)
-		return GetMin(theRoot->Right);
+		return GetMax(theRoot->Right);
 	else
 		return theRoot->value;
 }
