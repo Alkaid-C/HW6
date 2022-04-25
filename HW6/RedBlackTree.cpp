@@ -271,7 +271,7 @@ void RedBlackTree::Remove(unsigned long long int value)
 	if (exist(value))
 	{
 		Node* theNode = find(value);
-		Node* newNode;
+		Node* ReplacingNode;
 		// in binary search tree, there are 3 cases for deleting: the node has no child, 1 child, and 2 children
 		if (theNode->Left == nullptr && theNode->Right == nullptr)
 		{
@@ -330,18 +330,10 @@ void RedBlackTree::Remove(unsigned long long int value)
 			unsigned long long int temp = SucNode->value;
 			SucNode->value = theNode->value;
 			theNode->value = temp;
-			//note, exchange value does NOT make the tree to be an invalid BST.
+			//note, exchanging value and deleting it does NOT make the tree to be an invalid BST.
 			Remove(value);
+			//note, it will not cause infinite loop since the immediate successor must not have 2 children.
 		}
-		if (theNode->color == Red)
-		{
-
-		}
-		else
-		{
-
-		}
-
 	}
 }
 void RedBlackTree::bst_remove(Node* theNode, Node* theRoot)
