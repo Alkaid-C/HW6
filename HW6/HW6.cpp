@@ -260,7 +260,10 @@ void TestDelete() {
 	tree.Remove(22);
 
 	tree.DebugPrinter();
-	cout << endl << "Please check the result by hand" << endl;
+	cout << endl << "Deleting 23(not in the tree)" << endl;
+	tree.Remove(23);
+	tree.DebugPrinter();
+	cout << endl << "Please check the result by hand" << endl<<endl;
 }
 
 
