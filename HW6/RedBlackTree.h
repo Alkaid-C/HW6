@@ -26,12 +26,13 @@ private:
 	vector<Node*> DebugVector;
 	//this vector is for debug usage only.
 	//it will never be called except in DebugPrinter(). Try this function, it is super elegant.
-	//the copy constructer may not copy that, but who cares?
 	Node* treeCopyer(Node* OldRoot, Node* newParent);
 	bool exist(unsigned long long int value, Node* theRoot);
 	Node* find(unsigned long long int value, Node* theRoot);
 	void bst_insert(Node* theNode, Node* theRoot);
 	void insert_balancer(Node* theNode);
+	void bst_remove(Node* theNode, Node* theRoot);
+	void remove_balancer(Node* theNode);
 	void RBT_deleter(Node* theRoot);
 	void left_rotater(Node* theNode);
 	void right_rotater(Node* theNode);
@@ -52,6 +53,7 @@ public:
 	bool Contains(unsigned long long int value);
 	Node* find(unsigned long long int value);
 	Node* Insert(unsigned long long int value);
+	void Remove(unsigned long long int value);
 	unsigned long long int GetMin();
 	unsigned long long int GetMax();
 	size_t Size();
