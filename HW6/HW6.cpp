@@ -252,17 +252,19 @@ void TestDelete() {
 	tree.Insert(13);
 	tree.DebugPrinter();
 	cout << endl << "Deleting 18, 11, 3, 10, 22" << endl;
-
+	tree.Remove(22);
+	tree.Remove(8);
 	tree.Remove(18);
+	tree.Remove(2);
 	tree.Remove(11);
 	tree.Remove(3);
 	tree.Remove(10);
-	tree.Remove(22);
+	tree.DebugPrinter();
 
-	tree.DebugPrinter();
-	cout << endl << "Deleting 23(not in the tree)" << endl;
+
+	/*cout << endl << "Deleting 23(not in the tree)" << endl;
 	tree.Remove(23);
-	tree.DebugPrinter();
+	tree.DebugPrinter();*/
 	cout << endl << "Please check the result by hand" << endl<<endl;
 }
 
@@ -312,7 +314,7 @@ int main() {
 	TestGetMinimumMaximum();
 	TestDelete();
 	cout << "ALL TESTS PASSED!!" << endl;
-	SpeedTest();
+	//SpeedTest();
 	return 0;
 	
 }
