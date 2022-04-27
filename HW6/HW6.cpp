@@ -249,14 +249,43 @@ void TestDelete() {
 	rbt.Remove(60);
 	rbt.DebugPrinter();
 	cout << "PASSED!" << endl << endl;
+
+	RedBlackTree tree = RedBlackTree();
+
+	tree.Insert(7);
+	tree.Insert(3);
+	tree.Insert(18);
+	tree.Insert(10);
+	tree.Insert(22);
+	tree.Insert(8);
+	tree.Insert(11);
+	tree.Insert(26);
+	tree.Insert(2);
+	tree.DebugPrinter();
+	tree.Insert(6);
+	tree.DebugPrinter();
+	tree.Insert(13);
+	cout << "PASSED!" << endl << endl;
+	tree.DebugPrinter();
+
+	cout << endl << "Deleting 18, 11, 3, 10, 22" << endl;
+
+	tree.Remove(18);
+	tree.Remove(11);
+	tree.Remove(3);
+	tree.Remove(10);
+	tree.Remove(22);
+
+	tree.DebugPrinter();
 }
 
 
 
 
 
+
 int main() {
-	/*TestSimpleConstructor();
+	TestSimpleConstructor();
 	TestInsertFirstNode();
 	TestInsertSecondNode();
 	TestInsertThirdNode();
@@ -267,8 +296,9 @@ int main() {
 	TestCopyConstructor();
 	TestContains();
 	TestGetMinimumMaximum();
-	cout << "ALL TESTS PASSED!!" << endl;*/
+	cout << "ALL TESTS PASSED!!" << endl;
 
 	TestDelete();
+	cout << "ALL TESTS PASSED!!" << endl;
 	return 0;
 }
