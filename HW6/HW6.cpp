@@ -243,7 +243,7 @@ void TestDelete() {
 	RedBlackTree rbt = RedBlackTree();
 	cout << endl << "Building Rand Tree..." << endl<<endl;
 	srand(time(NULL));
-	int size = rand() % 15 + 5;
+	int size = rand() % 20 + 5;
 	vector<int> values;
 	for (int i = 0; i < size; i++)
 	{
@@ -252,7 +252,7 @@ void TestDelete() {
 	}
 	rbt.DebugPrinter();
 	cout <<endl<< "Remove following ";
-	for (int i = 0; i < size*0.75; i++)
+	for (int i = 0; i < size*0.5; i++)
 	{
 		int x = rand() % (values.size());
 		rbt.Remove(values.at(x));
@@ -296,6 +296,7 @@ void SpeedTest()
 
 
 int main() {
+	cout << "If it fails some tests, try use function DebugPrinter() to find what's happening. " << endl << endl;
 	TestSimpleConstructor();
 	TestInsertFirstNode();
 	TestInsertSecondNode();

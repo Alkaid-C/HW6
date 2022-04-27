@@ -106,10 +106,10 @@ Node* RedBlackTree::find(unsigned long long int value, Node* theRoot)
 Node* RedBlackTree::Insert(unsigned long long int value)
 {
 	if (!exist(value))
-	{
+	{//use this to prevent repeated input
 		numItems++;
 		if (root == nullptr)
-		{
+		{//if it is the first node, make it root
 			Node* theNode = new Node;
 			theNode->color = Black;
 			theNode->value = value;
@@ -142,7 +142,7 @@ void RedBlackTree::bst_insert(Node* theNode, Node* theRoot)
 		else
 			bst_insert(theNode, theRoot->Left);
 	}
-	else
+	else//note, because the possiblity of repated value has already be extingushed, then this else means <, not <=
 	{
 		if (theRoot->Right == nullptr)
 		{
@@ -273,7 +273,7 @@ void RedBlackTree::insert_balancer(Node* theNode)
 void RedBlackTree::Remove(unsigned long long int value)
 {
 	Node* theNode = find(value);
-	if (theNode!=nullptr)
+	if (theNode!=nullptr)//this if avoids deleting non-existing value
 		bst_remove(theNode, root);
 }
 void RedBlackTree::bst_remove(Node* theNode, Node* theRoot)
@@ -466,13 +466,13 @@ void RedBlackTree::remove_balancer(Node* theNode)
 			if (Sibling == nullptr)
 				cout << "unexpected behavior!!!" << endl;
 			else if (SibColor == Black)
-			{//case 2 in lecture
+			{//case 2 in lecture. Note, the implementation of this case is not standard.
 				if (SibLeftColor == Black && SibRightColor == Black)
 				{
 					//cout << "Branch a reached" << endl;
 					Sibling->color = Red;
 					theNode->color = Black;
-					theNode->Parent->color++;
+					theNode->Parent->color++;//this trick has been explained before
 					remove_balancer(theNode->Parent);
 				}
 				else
@@ -532,92 +532,6 @@ void RedBlackTree::remove_balancer(Node* theNode)
 			}
 		}
 	}
-	//if (theNode == root)
-	//	theNode->color = Black;
-	//else if (theNode->Parent->Left == theNode)
-	//{
-	//	Node* Parent = theNode->Parent;
-	//	Node* Sibling = theNode->Parent->Right;
-	//	if (Sibling->color == Red)
-	//	{//211
-	//		Sibling->color == Black;
-	//		left_rotater(theNode->Parent);
-	//		Node* Parent = theNode->Parent;
-	//		Node* Sibling = theNode->Parent->Right;
-	//		Sibling->color = Red;
-	//		remove_balancer(Parent);
-	//	}
-	//	else
-	//	{
-	//		if (Sibling->Right != nullptr)
-	//		{
-	//			if (Sibling->Right->color == Red)
-	//			{//2121
-	//				Sibling->color = Parent->color;
-	//				Parent->color = Black;
-	//				Sibling->Right->color = Black;
-	//				left_rotater(Parent);
-	//			}
-	//			else
-	//			{
-	//				if (Sibling->Left!=nullptr)
-	//				{
-	//					if (Sibling->Left->color == Red)//case 2122
-	//					{
-	//						Sibling->color = Red;
-	//						Sibling->Left->color = Black;
-	//						right_rotater(Sibling);
-	//						Node* Parent = theNode->Parent;
-	//						Node* Sibling = theNode->Parent->Right;
-	//						Sibling->color = Parent->color;
-	//						Parent->color = Black;
-	//						Sibling->Right->color = Black;
-	//						left_rotater(Parent);
-	//					}
-	//					else
-	//					{//2123
-	//						Sibling->color = Red;
-	//						remove_balancer(Parent);
-	//					}
-	//				}
-	//				else
-	//				{//2123
-	//					Sibling->color = Red;
-	//					remove_balancer(Parent);
-	//				}
-	//			}
-	//		}
-	//		else if (Sibling->Left != nullptr)
-	//		{
-	//			if (Sibling->Left->color == Red)//case 2122
-	//			{
-	//				Sibling->color = Red;
-	//				Sibling->Left->color = Black;
-	//				right_rotater(Sibling);
-	//				Node* Parent = theNode->Parent;
-	//				Node* Sibling = theNode->Parent->Right;
-	//				Sibling->color = Parent->color;
-	//				Parent->color = Black;
-	//				left_rotater(Parent);
-	//			}
-	//			else
-	//			{//2123
-	//				Sibling->color = Red;
-	//				remove_balancer(Parent);
-	//			}
-	//		}
-	//		else
-	//		{//2123
-	//			Sibling->color = Red;
-	//			remove_balancer(Parent);
-	//		}
-	//	}
-	//}
-	//else
-	//{
-	//	Node* Parent = theNode->Parent;
-	//	Node* Sibling = theNode->Parent->Left;
-	//}
 }
 void RedBlackTree::debugVector_remover(unsigned long long int value)
 {
