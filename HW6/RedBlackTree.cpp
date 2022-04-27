@@ -1,6 +1,7 @@
 #include "RedBlackTree.h"
 #include <iostream>
 #include<string>
+ 
 
 RedBlackTree::RedBlackTree()
 {
@@ -104,26 +105,30 @@ Node* RedBlackTree::find(unsigned long long int value, Node* theRoot)
 }
 Node* RedBlackTree::Insert(unsigned long long int value)
 {
-	numItems++;
-	if (root == nullptr)
+	if (!exist(value))
 	{
-		Node* theNode = new Node;
-		theNode->color = Black;
-		theNode->value = value;
-		root = theNode;
-		DebugVector.push_back(theNode);
-		return theNode;
+		numItems++;
+		if (root == nullptr)
+		{
+			Node* theNode = new Node;
+			theNode->color = Black;
+			theNode->value = value;
+			root = theNode;
+			DebugVector.push_back(theNode);
+			return theNode;
+		}
+		else
+		{
+			Node* theNode = new Node;
+			theNode->color = Red;
+			theNode->value = value;
+			bst_insert(theNode, root);
+			DebugVector.push_back(theNode);
+			insert_balancer(theNode);
+			return theNode;
+		}
 	}
-	else
-	{
-		Node* theNode = new Node;
-		theNode->color = Red;
-		theNode->value = value;
-		bst_insert(theNode, root);
-		DebugVector.push_back(theNode);
-		insert_balancer(theNode);
-		return theNode;
-	}
+	return nullptr;
 }
 void RedBlackTree::bst_insert(Node* theNode, Node* theRoot)
 {
