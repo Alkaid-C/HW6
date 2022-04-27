@@ -313,8 +313,9 @@ int main() {
 	TestContains();
 	TestGetMinimumMaximum();
 	TestDelete();
-	cout << "ALL TESTS PASSED!!" << endl;
-	//SpeedTest();
+	cout << "ALL FUNCTIONAL TESTS PASSED!!" << endl<<endl;
+	cout << "Do SpeedTest" << endl;
+	SpeedTest();
 	return 0;
 	
 }

@@ -276,7 +276,7 @@ void RedBlackTree::bst_remove(Node* theNode, Node* theRoot)
 	// in binary search tree, there are 3 cases for deleting: the node has no child, 1 child, and 2 children
 	if (theNode->Left == nullptr && theNode->Right == nullptr)
 	{
-		cout << "Branch 1 reached" << endl;
+		//cout << "Branch 1 reached" << endl;
 		//cout << "No Child" << endl;
 		//if it has no child, just delete it. don't forget delete it from its parent's child list.
 		if (theNode->Parent == nullptr)
@@ -304,7 +304,7 @@ void RedBlackTree::bst_remove(Node* theNode, Node* theRoot)
 		//if it has one child, then use the child to replace it
 		if (theNode->Left != nullptr)
 		{
-			cout << "Branch 2 reached" << endl;
+			//cout << "Branch 2 reached" << endl;
 			theNode->Left->Parent = theNode->Parent;
 			if (theNode->Parent == nullptr)
 				root = theNode->Left;
@@ -318,7 +318,7 @@ void RedBlackTree::bst_remove(Node* theNode, Node* theRoot)
 		}
 		else
 		{
-			cout << "Branch 3 reached" << endl;
+			//cout << "Branch 3 reached" << endl;
 			theNode->Right->Parent = theNode->Parent;
 			if (theNode->Parent == nullptr)
 				root = theNode->Right;
@@ -338,7 +338,7 @@ void RedBlackTree::bst_remove(Node* theNode, Node* theRoot)
 		//cout << "Double Child" << endl;
 		if (theRoot != root)
 			cout << "Unexpected behavior!" << endl;
-		cout << "Branch 4 reached" << endl;
+		//cout << "Branch 4 reached" << endl;
 		//then if it has 2 children, replace it with the immediate successor
 		Node* SucNode = find(GetMin(theNode->Right));
 		//exchange value
@@ -372,7 +372,7 @@ void RedBlackTree::remove_balancer(Node* theNode)
 			if (isNotAbandonedNode)
 				if (theNode->value < theNode->Parent->value)
 				{
-					cout << "Branch A reached" << endl;
+					//cout << "Branch A reached" << endl;
 					isLeftChild = true;
 					if (theNode->Parent->Right != nullptr)
 					{
@@ -401,7 +401,7 @@ void RedBlackTree::remove_balancer(Node* theNode)
 				}
 				else
 				{
-					cout << "Branch B reached" << endl;
+					//cout << "Branch B reached" << endl;
 					isLeftChild = false;
 					if (theNode->Parent->Left != nullptr)
 					{
@@ -430,7 +430,7 @@ void RedBlackTree::remove_balancer(Node* theNode)
 				}
 			else
 			{
-				cout << "Branch C reached" << endl;
+				//cout << "Branch C reached" << endl;
 				if (theNode->Parent->Left != nullptr)
 					isLeftChild = false;
 				if (isLeftChild)
@@ -464,7 +464,7 @@ void RedBlackTree::remove_balancer(Node* theNode)
 			{//case 2 in lecture
 				if (SibLeftColor == Black && SibRightColor == Black)
 				{
-					cout << "Branch a reached" << endl;
+					//cout << "Branch a reached" << endl;
 					Sibling->color = Red;
 					theNode->color = Black;
 					theNode->Parent->color++;
@@ -476,7 +476,7 @@ void RedBlackTree::remove_balancer(Node* theNode)
 					{
 						if (SibRightColor != Red)
 						{//left left case
-							cout << "Branch b reached" << endl;
+							//cout << "Branch b reached" << endl;
 							SibLeft->color = Black;
 							Sibling->color = Red;
 							right_rotater(Sibling);
@@ -484,7 +484,7 @@ void RedBlackTree::remove_balancer(Node* theNode)
 						}
 						else
 						{//left right case
-							cout << "Branch c reached" << endl;
+							//cout << "Branch c reached" << endl;
 							SibRight->color = Sibling->color;
 							Sibling->color = theNode->Parent->color;
 							theNode->Parent->color = Black;
@@ -496,7 +496,7 @@ void RedBlackTree::remove_balancer(Node* theNode)
 					{
 						if (SibLeftColor != Red)
 						{//right right case
-							cout << "Branch d reached" << endl;
+							//cout << "Branch d reached" << endl;
 							Sibling->color = Red;
 							Sibling->Right->color = Black;
 							left_rotater(Sibling);
@@ -504,7 +504,7 @@ void RedBlackTree::remove_balancer(Node* theNode)
 						}
 						else
 						{//right left case
-							cout << "Branch e reached" << endl;
+							//cout << "Branch e reached" << endl;
 							SibLeft->color = Black;
 							Sibling->color = theNode->Parent->color;
 							theNode->Parent->color = Black;
@@ -516,7 +516,7 @@ void RedBlackTree::remove_balancer(Node* theNode)
 			}
 			else
 			{//case 3 in lecture
-				cout << "Branch f reached" << endl;
+				//cout << "Branch f reached" << endl;
 				Sibling->color = Black;
 				theNode->Parent->color = Red;
 				if (isLeftChild)
