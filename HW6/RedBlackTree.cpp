@@ -267,11 +267,9 @@ void RedBlackTree::insert_balancer(Node* theNode)
 }
 void RedBlackTree::Remove(unsigned long long int value)
 {
-	if (exist(value))
-	{
-		Node* theNode = find(value);
+	Node* theNode = find(value);
+	if (theNode!=nullptr)
 		bst_remove(theNode, root);
-	}
 }
 void RedBlackTree::bst_remove(Node* theNode, Node* theRoot)
 {
