@@ -195,7 +195,7 @@ void RedBlackTree::insert_balancer(Node* theNode)
 					}
 					else
 					{
-						left_rotater(theNode->Parent);
+						right_rotater(theNode->Parent);
 						Node* newTheNode = theNode->Right;
 						newTheNode->Parent->Parent->color = Red;
 						newTheNode->Parent->color = Black;
@@ -278,7 +278,7 @@ void RedBlackTree::bst_remove(Node* theNode, Node* theRoot)
 	// in binary search tree, there are 3 cases for deleting: the node has no child, 1 child, and 2 children
 	if (theNode->Left == nullptr && theNode->Right == nullptr)
 	{
-		cout << "No Child" << endl;
+		//cout << "No Child" << endl;
 		//if it has no child, just delete it. don't forget delete it from its parent's child list.
 		if (theNode->Parent == nullptr)
 			//if it is the root
@@ -301,7 +301,7 @@ void RedBlackTree::bst_remove(Node* theNode, Node* theRoot)
 	}
 	else if (theNode->Left == nullptr || theNode->Right == nullptr)
 	{
-		cout << "Single Child" << endl;
+		//cout << "Single Child" << endl;
 		//if it has one child, then use the child to replace it
 		if (theNode->Left != nullptr)
 		{
@@ -334,7 +334,7 @@ void RedBlackTree::bst_remove(Node* theNode, Node* theRoot)
 	else
 	{
 		//the line below is for debug check
-		cout << "Double Child" << endl;
+		//cout << "Double Child" << endl;
 		if (theRoot != root)
 			cout << "Unexpected behavior!" << endl;
 		//then if it has 2 children, replace it with the immediate successor
@@ -351,8 +351,6 @@ void RedBlackTree::bst_remove(Node* theNode, Node* theRoot)
 }
 void RedBlackTree::remove_balancer(Node* theNode)
 {
-	cout << theNode->value << endl;
-	DebugPrinter();
 	if (theNode->color == DoubleBlack)
 	{//if there is double black, then we need to deal with it
 		if (theNode->Parent == nullptr)
@@ -454,6 +452,7 @@ void RedBlackTree::remove_balancer(Node* theNode)
 					SibRightColor = Black;
 				}
 			}
+			//initializing finished.
 			if (Sibling == nullptr)
 				cout << "unexpected behavior!!!" << endl;
 			else if (SibColor == Black)
