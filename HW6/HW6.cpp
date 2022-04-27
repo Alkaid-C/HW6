@@ -5,6 +5,9 @@
 #include <cstdlib>
 #include <ctime>
 #include "RedBlackTree.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 using namespace std;
 
@@ -237,35 +240,27 @@ void TestGetMinimumMaximum() {
 void TestDelete() {
 	cout << "Testing Delete..." << endl;
 
-	RedBlackTree tree = RedBlackTree();
-	cout << endl << "Insert 7,3,18,10,22,8,11,26,2,6,13" << endl;
-	tree.Insert(7);
-	tree.Insert(3);
-	tree.Insert(18);
-	tree.Insert(10);
-	tree.Insert(22);
-	tree.Insert(8);
-	tree.Insert(11);
-	tree.Insert(26);
-	tree.Insert(2);
-	tree.Insert(6);
-	tree.Insert(13);
-	tree.DebugPrinter();
-	cout << endl << "Deleting 18, 11, 3, 10, 22" << endl;
-	tree.Remove(22);
-	tree.Remove(8);
-	tree.Remove(18);
-	tree.Remove(2);
-	tree.Remove(11);
-	tree.Remove(3);
-	tree.Remove(10);
-	tree.DebugPrinter();
+	RedBlackTree rbt = RedBlackTree();
+	cout << endl << "Building Rand Tree..." << endl<<endl;
+	srand(time(NULL));
+	int size = rand() % 15 + 5;
+	vector<int> values;
+	for (int i = 0; i < size; i++)
+	{
+		values.push_back(rand() % 40 + 10);
+		rbt.Insert(values.back());
+	}
+	rbt.DebugPrinter();
+	cout <<endl<< "Remove following ";
+	for (int i = 0; i < size*0.75; i++)
+	{
+		int x = rand() % (values.size());
+		rbt.Remove(values.at(x));
+		cout << values.at(x) << ", ";
+	}
+	cout <<"then we have" << endl << endl;
+	rbt.DebugPrinter();
 
-
-	/*cout << endl << "Deleting 23(not in the tree)" << endl;
-	tree.Remove(23);
-	tree.DebugPrinter();*/
-	cout << endl << "Please check the result by hand" << endl<<endl;
 }
 
 
