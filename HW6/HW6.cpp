@@ -2,6 +2,8 @@
 #include <iostream>
 #include <cassert>
 #include <random>
+#include <cstdlib>
+#include <ctime>
 #include "RedBlackTree.h"
 
 using namespace std;
@@ -235,23 +237,8 @@ void TestGetMinimumMaximum() {
 void TestDelete() {
 	cout << "Testing Delete..." << endl;
 
-	RedBlackTree rbt = RedBlackTree();
-	rbt.Insert(30);
-	rbt.Insert(20);
-	rbt.Insert(60);
-	rbt.Insert(33);
-	rbt.Insert(23);
-	rbt.Insert(85);
-	rbt.Insert(61);
-	rbt.DebugPrinter();
-	rbt.Remove(61);
-	rbt.DebugPrinter();
-	rbt.Remove(60);
-	rbt.DebugPrinter();
-	cout << "PASSED!" << endl << endl;
-
 	RedBlackTree tree = RedBlackTree();
-
+	cout << endl << "Insert 7,3,18,10,22,8,11,26,2,6,13" << endl;
 	tree.Insert(7);
 	tree.Insert(3);
 	tree.Insert(18);
@@ -261,13 +248,9 @@ void TestDelete() {
 	tree.Insert(11);
 	tree.Insert(26);
 	tree.Insert(2);
-	tree.DebugPrinter();
 	tree.Insert(6);
-	tree.DebugPrinter();
 	tree.Insert(13);
-	cout << "PASSED!" << endl << endl;
 	tree.DebugPrinter();
-
 	cout << endl << "Deleting 18, 11, 3, 10, 22" << endl;
 
 	tree.Remove(18);
@@ -277,11 +260,39 @@ void TestDelete() {
 	tree.Remove(22);
 
 	tree.DebugPrinter();
+	cout << endl << "Please check the result by hand" << endl;
 }
 
 
 
-
+void SpeedTest()
+{
+	const int N = 3700000;
+	clock_t start = clock();
+	RedBlackTree rbt = RedBlackTree();
+	for (int i = 0; i < N; i++) {
+		rbt.Insert(i);
+	}
+	clock_t stop = clock();
+	double duration = (static_cast<double>(stop - start)) / CLOCKS_PER_SEC;
+	cout << "Collected " << rbt.Size() << " ID numbers in " << (duration) << " seconds." << endl;
+	rbt.Remove(rand() % 3700000);
+	rbt.Remove(rand() % 3700000);
+	rbt.Remove(rand() % 3700000);
+	rbt.Remove(rand() % 3700000);
+	rbt.Remove(rand() % 3700000);
+	clock_t remove = clock();
+	double duration_remove = (static_cast<double>(remove - stop)) / CLOCKS_PER_SEC;
+	cout << "Removeed 5 ID numbers in " << (duration_remove) << " seconds." << endl;
+	rbt.Insert(rand());
+	rbt.Insert(rand());
+	rbt.Insert(rand());
+	rbt.Insert(rand());
+	rbt.Insert(rand());
+	clock_t add = clock();
+	double duration_add = (static_cast<double>(add - remove)) / CLOCKS_PER_SEC;
+	cout << "Added 5 ID numbers in " << (duration_add) << " seconds." << endl;
+}
 
 
 int main() {
@@ -296,9 +307,9 @@ int main() {
 	TestCopyConstructor();
 	TestContains();
 	TestGetMinimumMaximum();
-	cout << "ALL TESTS PASSED!!" << endl;
-
 	TestDelete();
 	cout << "ALL TESTS PASSED!!" << endl;
+	SpeedTest();
 	return 0;
+	
 }
