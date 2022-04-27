@@ -1,8 +1,9 @@
 #ifndef REDBLACKTREE
 #define REDBLACKTREE
 
-#define Black 0
-#define Red 1
+#define Black 1
+#define Red 0
+#define DoubleBlack 2
 
 #include<vector>
 #include<string>
@@ -33,6 +34,7 @@ private:
 	void insert_balancer(Node* theNode);
 	void bst_remove(Node* theNode, Node* theRoot);
 	void remove_balancer(Node* theNode);
+	void debugVector_remover(unsigned long long int value);
 	void RBT_deleter(Node* theRoot);
 	void left_rotater(Node* theNode);
 	void right_rotater(Node* theNode);
@@ -48,7 +50,7 @@ private:
 public:
 	RedBlackTree();
 	RedBlackTree(const RedBlackTree&);
-	//~RedBlackTree();
+	~RedBlackTree();
 	bool exist(unsigned long long int value);
 	bool Contains(unsigned long long int value);
 	Node* find(unsigned long long int value);
@@ -59,9 +61,9 @@ public:
 	size_t Size();
 	void printer();
 	void DebugPrinter(); 
-	string ToInfixString() const { return ToInfixString(root); };
-	string ToPrefixString() const { return ToPrefixString(root); };
-	string ToPostfixString() const { return ToPostfixString(root); };
+	string ToInfixString() const;
+	string ToPrefixString() const;
+	string ToPostfixString() const;
 }
 #endif
 ;

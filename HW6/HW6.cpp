@@ -92,7 +92,6 @@ void TestInsertFifthNode() {
 	rbt->Insert(45);
 	rbt->Insert(10);
 	rbt->Insert(25);
-	rbt->DebugPrinter();
 	//cout << "result: "  << rbt->ToPrefixString() << endl;
 	assert(rbt->ToPrefixString() == " B30  B15  R10  R25  B45 ");
 	delete rbt;
@@ -203,20 +202,14 @@ void TestContains() {
 	rbt->Insert(29);
 	rbt->Insert(34);
 
+
 	assert(rbt->Contains(34));
-	rbt->DebugPrinter();
 	assert(rbt->Contains(12));
-	rbt->DebugPrinter();
 	assert(rbt->Contains(35) == false);
-	rbt->DebugPrinter();
 	delete rbt;
-	cout << "PASSED!" << endl << endl;
 	rbt = new RedBlackTree();
-	rbt->DebugPrinter();
 	assert(rbt->Contains(34) == false);
-	cout << "PASSED!" << endl << endl;
 	delete rbt;
-	rbt->DebugPrinter();
 	cout << "PASSED!" << endl << endl;
 }
 
@@ -232,11 +225,29 @@ void TestGetMinimumMaximum() {
 	rbt.Insert(23);
 	rbt.Insert(85);
 	rbt.Insert(61);
-	rbt.DebugPrinter();
-	cout << rbt.GetMax();
 	assert(rbt.GetMin() == 20);
 	assert(rbt.GetMax() == 85);
 
+	cout << "PASSED!" << endl << endl;
+}
+
+
+void TestDelete() {
+	cout << "Testing Delete..." << endl;
+
+	RedBlackTree rbt = RedBlackTree();
+	rbt.Insert(30);
+	rbt.Insert(20);
+	rbt.Insert(60);
+	rbt.Insert(33);
+	rbt.Insert(23);
+	rbt.Insert(85);
+	rbt.Insert(61);
+	rbt.DebugPrinter();
+	rbt.Remove(61);
+	rbt.DebugPrinter();
+	rbt.Remove(60);
+	rbt.DebugPrinter();
 	cout << "PASSED!" << endl << endl;
 }
 
@@ -245,25 +256,19 @@ void TestGetMinimumMaximum() {
 
 
 int main() {
-
-
-	TestSimpleConstructor();
-
+	/*TestSimpleConstructor();
 	TestInsertFirstNode();
 	TestInsertSecondNode();
 	TestInsertThirdNode();
 	TestInsertFourthNode();
 	TestInsertFifthNode();
-
 	TestToStrings();
 	TestInsertRandomTests();
-
 	TestCopyConstructor();
-
 	TestContains();
 	TestGetMinimumMaximum();
+	cout << "ALL TESTS PASSED!!" << endl;*/
 
-
-	cout << "ALL TESTS PASSED!!" << endl;
+	TestDelete();
 	return 0;
 }
