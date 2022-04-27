@@ -256,7 +256,6 @@ void RedBlackTree::insert_balancer(Node* theNode)
 				else
 				{
 					right_rotater(theNode->Parent);
-					DebugPrinter();
 					Node* newTheNode = theNode->Right;
 					newTheNode->Parent->Parent->color = Red;
 					newTheNode->Parent->color = Black;
@@ -271,78 +270,347 @@ void RedBlackTree::Remove(unsigned long long int value)
 	if (exist(value))
 	{
 		Node* theNode = find(value);
-		Node* ReplacingNode;
-		// in binary search tree, there are 3 cases for deleting: the node has no child, 1 child, and 2 children
-		if (theNode->Left == nullptr && theNode->Right == nullptr)
-		{
-			//if it has no child, just delete it. don't forget delete it from its parent's child list.
-			if (theNode->Parent == nullptr)
-				//if it is the root
-				root = nullptr;
-			else if (theNode->Parent->Left != nullptr)
-				if (theNode->Parent->Left->value == theNode->value)
-					//if it is the left child
-					theNode->Parent->Left = nullptr;
-				else
-					//if it is the right child
-					theNode->Parent->Right = nullptr;
-			else
-				theNode->Parent->Right = nullptr;
-		}
-		else if (theNode->Left == nullptr || theNode->Right == nullptr)
-		{
-			//if it has one child, then use the child to replace it
-			if (theNode->Left != nullptr)
-			{//if it has left child
-				theNode->Left->Parent = theNode->Parent;
-				if (theNode->Parent == nullptr)
-					//if it is the root
-					root = theNode->Left;
-				else if (theNode->Parent->Left != nullptr)
-					if (theNode->Parent->Left->value == theNode->value)
-						//if it is the left child
-						theNode->Parent->Left = theNode->Left;
-					else
-						//if it is the right child
-						theNode->Parent->Right = theNode->Left;
-				else
-					theNode->Parent->Right = theNode->Left;
-			}
-			else
-			{//otherwise, it has the right child
-				theNode->Right->Parent = theNode->Parent;
-				if (theNode->Parent == nullptr)
-					root = theNode->Right;
-				else if (theNode->Parent->Left != nullptr)
-					if (theNode->Parent->Left->value == theNode->value)
-						theNode->Parent->Left = theNode->Right;
-					else
-						theNode->Parent->Right = theNode->Right;
-				else
-					theNode->Parent->Right = theNode->Right;
-			}
-		}
-		else
-		{
-			//then if it has 2 children, replace it with the immediate successor
-			Node* SucNode = find(GetMin(theNode->Right));
-			//exchange value
-			unsigned long long int temp = SucNode->value;
-			SucNode->value = theNode->value;
-			theNode->value = temp;
-			//note, exchanging value and deleting it does NOT make the tree to be an invalid BST.
-			Remove(value);
-			//note, it will not cause infinite loop since the immediate successor must not have 2 children.
-		}
+		bst_remove(theNode, root);
 	}
 }
 void RedBlackTree::bst_remove(Node* theNode, Node* theRoot)
 {
-
+	// in binary search tree, there are 3 cases for deleting: the node has no child, 1 child, and 2 children
+	if (theNode->Left == nullptr && theNode->Right == nullptr)
+	{
+		cout << "No Child" << endl;
+		//if it has no child, just delete it. don't forget delete it from its parent's child list.
+		if (theNode->Parent == nullptr)
+			//if it is the root
+			root = nullptr;
+		else if (theNode->Parent->Left == theNode)
+			//if it is the left child
+			theNode->Parent->Left = nullptr;
+		else
+			//if it is the right child
+		{
+			theNode->Parent->Right = nullptr;
+		}
+		theNode->color ++;
+		//Note this trick here: black is 1, red is 0, and double black is hence 2.
+		//We know that, for the replacing node, if it is red & red then it is red; if it is red & black it is black; if it is black & black it is double black;
+		//It just fits with addition.
+		remove_balancer(theNode);
+		debugVector_remover(theNode->value);
+		delete theNode;
+	}
+	else if (theNode->Left == nullptr || theNode->Right == nullptr)
+	{
+		cout << "Single Child" << endl;
+		//if it has one child, then use the child to replace it
+		if (theNode->Left != nullptr)
+		{
+			theNode->Left->Parent = theNode->Parent;
+			if (theNode->Parent == nullptr)
+				root = theNode->Left;
+			else if (theNode->Parent->Left == theNode)
+				theNode->Parent->Left = theNode->Left;
+			else
+				theNode->Parent->Right = theNode->Left;
+			theNode->Left->color += theNode->color;
+			//Trick again. See comment above
+			remove_balancer(theNode->Left);
+		}
+		else
+		{
+			theNode->Right->Parent = theNode->Parent;
+			if (theNode->Parent == nullptr)
+				root = theNode->Right;
+			else if (theNode->Parent->Left == theNode)
+				theNode->Parent->Left = theNode->Right;
+			else
+				theNode->Parent->Right = theNode->Right;
+			theNode->Right->color += theNode->color;
+			remove_balancer(theNode->Right);
+		}
+		debugVector_remover(theNode->value);
+		delete theNode;
+	}
+	else
+	{
+		//the line below is for debug check
+		cout << "Double Child" << endl;
+		if (theRoot != root)
+			cout << "Unexpected behavior!" << endl;
+		//then if it has 2 children, replace it with the immediate successor
+		Node* SucNode = find(GetMin(theNode->Right));
+		//exchange value
+		unsigned long long int temp = SucNode->value;
+		SucNode->value = theNode->value;
+		theNode->value = temp;
+		//note, exchanging value and deleting it does NOT make the tree to be an invalid BST.
+		bst_remove(SucNode, theNode->Right);
+		//note, it will not cause infinite loop since the immediate successor must not have 2 children.
+	}
+	//Need work on this part
 }
 void RedBlackTree::remove_balancer(Node* theNode)
 {
-
+	cout << theNode->value << endl;
+	DebugPrinter();
+	if (theNode->color == DoubleBlack)
+	{//if there is double black, then we need to deal with it
+		if (theNode->Parent == nullptr)
+			//if the double black happen at the root node, just turn it to black.
+			theNode->color = Black;
+		else
+		{//otherwise...
+			//initialize some varibles
+			bool isLeftChild = true;
+			bool isNotAbandonedNode = (theNode->Parent->Left == theNode || theNode->Parent->Right == theNode);
+			Node* Sibling = nullptr;
+			unsigned short SibColor = Black;
+			Node* SibLeft = nullptr;
+			unsigned short SibLeftColor = Black;
+			unsigned short SibRightColor = Black;
+			Node* SibRight = nullptr;
+			if (isNotAbandonedNode)
+				if (theNode->value < theNode->Parent->value)
+				{
+					isLeftChild = true;
+					if (theNode->Parent->Right != nullptr)
+					{
+						Sibling = theNode->Parent->Right;
+						SibColor = Sibling->color;
+						if (Sibling->Left != nullptr)
+						{
+							SibLeft = Sibling->Left;
+							SibLeftColor = SibLeft->color;
+						}
+						else
+						{
+							SibLeftColor = Black;
+						}
+						if (Sibling->Right != nullptr)
+						{
+							SibRight = Sibling->Right;
+							SibRightColor = SibRight->color;
+						}
+						else
+						{
+							SibRightColor = Black;
+						}
+					}
+					SibColor = Black;
+				}
+				else
+				{
+					isLeftChild = false;
+					if (theNode->Parent->Left != nullptr)
+					{
+						Sibling = theNode->Parent->Left;
+						SibColor = Sibling->color;
+						if (Sibling->Left != nullptr)
+						{
+							SibLeft = Sibling->Left;
+							SibLeftColor = SibLeft->color;
+						}
+						else
+						{
+							SibLeftColor = Black;
+						}
+						if (Sibling->Right != nullptr)
+						{
+							SibRight = Sibling->Right;
+							SibRightColor = SibRight->color;
+						}
+						else
+						{
+							SibRightColor = Black;
+						}
+					}
+					SibColor = Black;
+				}
+			else
+			{
+				if (theNode->Parent->Left != nullptr)
+					isLeftChild = false;
+				if (isLeftChild)
+					Sibling = theNode->Parent->Right;
+				else
+					Sibling = theNode->Parent->Left;
+				SibColor = Sibling->color;
+				if (Sibling->Left != nullptr)
+				{
+					SibLeft = Sibling->Left;
+					SibLeftColor = SibLeft->color;
+				}
+				else
+				{
+					SibLeftColor = Black;
+				}
+				if (Sibling->Right != nullptr)
+				{
+					SibRight = Sibling->Right;
+					SibRightColor = SibRight->color;
+				}
+				else
+				{
+					SibRightColor = Black;
+				}
+			}
+			if (Sibling == nullptr)
+				cout << "unexpected behavior!!!" << endl;
+			else if (SibColor == Black)
+			{//case 2 in lecture
+				if (SibLeftColor == Black && SibRightColor == Black)
+				{
+					Sibling->color = Red;
+					theNode->color = Black;
+					theNode->Parent->color++;
+					remove_balancer(theNode->Parent);
+				}
+				else
+				{
+					if (isLeftChild)
+					{
+						if (SibRightColor != Red)
+						{//left left case
+							SibLeft->color = Black;
+							Sibling->color = Red;
+							right_rotater(theNode->Parent);
+							remove_balancer(theNode);
+						}
+						else
+						{//left right case
+							SibLeft->color = Sibling->color;
+							Sibling->color = theNode->Parent->color;
+							theNode->Parent->color = Black;
+							theNode->color = Black;
+							left_rotater(theNode->Parent);
+						}
+					}
+					else
+					{
+						if (SibLeftColor != Red)
+						{//right right case
+							Sibling->color = Red;
+							Sibling->Right->color = Black;
+							left_rotater(Sibling);
+							remove_balancer(theNode);
+						}
+						else
+						{//right left case
+							SibLeft->color = Black;
+							Sibling->color = theNode->Parent->color;
+							theNode->Parent->color = Black;
+							theNode->color = Black;
+							right_rotater(theNode->Parent);
+						}
+					}
+				}
+			}
+			else
+			{//case 3 in lecture
+				Sibling->color = Black;
+				theNode->Parent->color = Red;
+				if (isLeftChild)
+					left_rotater(theNode->Parent);
+				else
+					right_rotater(theNode->Parent);
+				remove_balancer(theNode);
+			}
+		}
+	}
+	//if (theNode == root)
+	//	theNode->color = Black;
+	//else if (theNode->Parent->Left == theNode)
+	//{
+	//	Node* Parent = theNode->Parent;
+	//	Node* Sibling = theNode->Parent->Right;
+	//	if (Sibling->color == Red)
+	//	{//211
+	//		Sibling->color == Black;
+	//		left_rotater(theNode->Parent);
+	//		Node* Parent = theNode->Parent;
+	//		Node* Sibling = theNode->Parent->Right;
+	//		Sibling->color = Red;
+	//		remove_balancer(Parent);
+	//	}
+	//	else
+	//	{
+	//		if (Sibling->Right != nullptr)
+	//		{
+	//			if (Sibling->Right->color == Red)
+	//			{//2121
+	//				Sibling->color = Parent->color;
+	//				Parent->color = Black;
+	//				Sibling->Right->color = Black;
+	//				left_rotater(Parent);
+	//			}
+	//			else
+	//			{
+	//				if (Sibling->Left!=nullptr)
+	//				{
+	//					if (Sibling->Left->color == Red)//case 2122
+	//					{
+	//						Sibling->color = Red;
+	//						Sibling->Left->color = Black;
+	//						right_rotater(Sibling);
+	//						Node* Parent = theNode->Parent;
+	//						Node* Sibling = theNode->Parent->Right;
+	//						Sibling->color = Parent->color;
+	//						Parent->color = Black;
+	//						Sibling->Right->color = Black;
+	//						left_rotater(Parent);
+	//					}
+	//					else
+	//					{//2123
+	//						Sibling->color = Red;
+	//						remove_balancer(Parent);
+	//					}
+	//				}
+	//				else
+	//				{//2123
+	//					Sibling->color = Red;
+	//					remove_balancer(Parent);
+	//				}
+	//			}
+	//		}
+	//		else if (Sibling->Left != nullptr)
+	//		{
+	//			if (Sibling->Left->color == Red)//case 2122
+	//			{
+	//				Sibling->color = Red;
+	//				Sibling->Left->color = Black;
+	//				right_rotater(Sibling);
+	//				Node* Parent = theNode->Parent;
+	//				Node* Sibling = theNode->Parent->Right;
+	//				Sibling->color = Parent->color;
+	//				Parent->color = Black;
+	//				left_rotater(Parent);
+	//			}
+	//			else
+	//			{//2123
+	//				Sibling->color = Red;
+	//				remove_balancer(Parent);
+	//			}
+	//		}
+	//		else
+	//		{//2123
+	//			Sibling->color = Red;
+	//			remove_balancer(Parent);
+	//		}
+	//	}
+	//}
+	//else
+	//{
+	//	Node* Parent = theNode->Parent;
+	//	Node* Sibling = theNode->Parent->Left;
+	//}
+}
+void RedBlackTree::debugVector_remover(unsigned long long int value)
+{
+	for (size_t i = 0; i < DebugVector.size(); i++)
+	{
+		if (DebugVector.at(i)->value == value)
+			DebugVector.erase(DebugVector.begin()+i);
+	}
 }
 void RedBlackTree::left_rotater(Node* theNode)
 {
@@ -554,4 +822,16 @@ string RedBlackTree::ToPostfixString(Node* theRoot) const
 		output += " ";
 	}
 	return output;
+}
+string RedBlackTree::ToInfixString() const 
+{ 
+	return ToInfixString(root); 
+}
+string RedBlackTree::ToPrefixString() const 
+{
+	return ToPrefixString(root); 
+}
+string RedBlackTree::ToPostfixString() const 
+{
+	return ToPostfixString(root);
 }
