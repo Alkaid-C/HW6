@@ -4,7 +4,7 @@
 #include <random>
 #include <cstdlib>
 #include <ctime>
-#include "RedBlackTree.h"
+#include "RedBlackTree-P.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
