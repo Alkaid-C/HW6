@@ -242,8 +242,8 @@ void TestDelete() {
 
 	RedBlackTree rbt = RedBlackTree();
 	cout << endl << "Building Rand Tree..." << endl<<endl;
-	srand(time(NULL));
-	int size = rand() % 20 + 5;
+	srand(time(NULL)+rand());
+	int size = rand() % 20 + 20;
 	vector<int> values;
 	for (int i = 0; i < size; i++)
 	{
@@ -252,7 +252,7 @@ void TestDelete() {
 	}
 	rbt.DebugPrinter();
 	cout <<endl<< "Remove following ";
-	for (int i = 0; i < size*0.5; i++)
+	for (int i = 0; i < size*0.8; i++)
 	{
 		int x = rand() % (values.size());
 		rbt.Remove(values.at(x));
@@ -308,6 +308,10 @@ int main() {
 	TestCopyConstructor();
 	TestContains();
 	TestGetMinimumMaximum();
+	TestDelete();
+	TestDelete();
+	TestDelete();
+	TestDelete();
 	TestDelete();
 	cout << "ALL FUNCTIONAL TESTS PASSED!!" << endl<<endl;
 	cout << "Do SpeedTest" << endl;
