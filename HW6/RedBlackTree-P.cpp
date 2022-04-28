@@ -112,7 +112,6 @@ Node* RedBlackTree::Insert(unsigned long long int value)
 			theNode->color = Black;
 			theNode->value = value;
 			root = theNode;
-			DebugVector.push_back(theNode);
 			return theNode;
 		}
 		else
@@ -299,7 +298,6 @@ void RedBlackTree::bst_remove(Node* theNode, Node* theRoot)
 		//We know that, for the replacing node, if it is red & red then it is red; if it is red & black it is black; if it is black & black it is double black;
 		//It just fits with addition.
 		remove_balancer(theNode);
-		debugVector_remover(theNode->value);
 		delete theNode;
 	}
 	else if (theNode->Left == nullptr || theNode->Right == nullptr)
