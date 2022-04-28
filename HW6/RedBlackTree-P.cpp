@@ -120,8 +120,17 @@ Node* RedBlackTree::Insert(unsigned long long int value)
 			theNode->color = Red;
 			theNode->value = value;
 			bst_insert(theNode, root);
-			insert_balancer(theNode);
-			return theNode;
+			if (theNode->color != DoubleBlack)
+			{
+				insert_balancer(theNode);
+				return theNode;
+			}
+			else
+			{
+				delete theNode;
+				return nullptr;
+			}
+
 		}
 }
 void RedBlackTree::bst_insert(Node* theNode, Node* theRoot)
@@ -146,10 +155,10 @@ void RedBlackTree::bst_insert(Node* theNode, Node* theRoot)
 		else
 			bst_insert(theNode, theRoot->Right);
 	}
-  else
-  {
-    theNode=nullptr;
-  }
+	else
+	{
+		theNode->color = DoubleBlack;
+	}
 }
 void RedBlackTree::insert_balancer(Node* theNode)
 {
